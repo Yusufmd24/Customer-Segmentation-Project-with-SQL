@@ -6,11 +6,13 @@ select * from orders
 SELECT * FROM orders 
 WHERE total_amount > 0;
 
+
 -- Check for Duplicate values
 SELECT order_id, COUNT(*)
 FROM orders 
 GROUP BY order_id
 HAVING COUNT(*) > 1 ;
+
 
 -- Customer Revenue Analysis
 SELECT customer_id, 
@@ -19,12 +21,14 @@ FROM orders
 GROUP BY customer_id
 ORDER BY total_revenue DESC ;
 
+
 -- Purchase Frequency Analysis
 SELECT customer_id, 
 	   COUNT(order_id) AS purchase_frequency
 FROM orders
 GROUP BY customer_id
 ORDER BY purchase_frequency DESC;
+
 
 -- Recency Analysis
 SELECT  customer_id, 
@@ -34,12 +38,14 @@ FROM orders
 GROUP BY customer_id
 ORDER BY days_since_last_purchase DESC;
 
+
 -- Average Order Value
 SELECT customer_id, 
 	   ROUND(AVG(total_amount), 2) AS avg_order_value
 FROM orders
 GROUP BY customer_id
 ORDER BY avg_order_value DESC;
+
 
 -- Customer Lifetime Value
 SELECT customer_id, 
@@ -48,12 +54,14 @@ FROM orders
 GROUP BY customer_id
 ORDER BY lifetime_value DESC;
 
+
 -- Revenue Ranking Using Window Function
 SELECT customer_id,
 		ROUND(SUM(total_amount),2) AS total_revenue,
 		RANK() OVER(ORDER BY SUM(total_amount) DESC) AS revenue_rank
 FROM orders
 GROUP BY customer_id;
+
 
 -- Customer Segmentation
 WITH customer_metrics AS(
@@ -74,7 +82,8 @@ ELSE 'Regular Customers'
 END AS customer_segments
 From customer_metrics;
 
--- Pareto Analysis
+
+-- Pareto Analysis(80/20 Principle)
 WITH revenue_table AS (
 SELECT customer_id, 
 	   ROUND(SUM(total_amount),2) AS revenue
